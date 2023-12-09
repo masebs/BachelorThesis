@@ -1,0 +1,2 @@
+e.g. mpirun -np 4 osu_allreduce -m 8:$((2**25)) -i 200 -x 50 > num_plasma/log-allreduce_funkel.log
+(dataset msg_sppm or num_plasma is set in source file!)

@@ -1,0 +1,34 @@
+New Instance
+New Instance
+New Instance
+New Instance
+Hi Init hello
+
+# OSU MPI Broadcast Latency Test
+# Size       Avg Latency(us)
+Hi Init hello
+Hi Init hello
+Hi Init hello
+8                      48.92
+16                     52.90
+32                     50.36
+64                     56.93
+128                    53.10
+256                    51.03
+512                    54.30
+1024                   50.83
+2048                   50.84
+4096                   53.90
+8192                   48.87
+16384                  53.07
+32768                 106.13
+65536                 118.72
+131072                152.77
+262144                208.56
+524288                314.38
+1048576               525.53
+2097152               805.46
+4194304              1444.64
+8388608              3021.31
+16777216             5908.30
+33554432            11605.61

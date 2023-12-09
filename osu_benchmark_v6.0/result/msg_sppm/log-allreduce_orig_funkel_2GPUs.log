@@ -1,0 +1,28 @@
+[1693073547.774041] [funkel:742145:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+[1693073547.774041] [funkel:742146:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+
+# OSU MPI-CUDA Allreduce Latency Test
+# Size       Avg Latency(us)
+8                      44.87
+16                     45.22
+32                     45.03
+64                     44.87
+128                    45.24
+256                    45.34
+512                    45.47
+1024                   46.89
+2048                   49.52
+4096                   55.62
+8192                   64.54
+16384                  83.31
+32768                 120.68
+65536                 197.57
+131072                359.46
+262144                657.59
+524288               1254.27
+1048576              2599.35
+2097152              5272.18
+4194304             10472.85
+8388608             20807.85
+16777216            41220.65
+33554432            80553.01

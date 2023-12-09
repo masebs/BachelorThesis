@@ -1,0 +1,59 @@
+STEP BY STEP INSTRUCTIONS:
+
+STEP 0: Clean start
+For a clean start, deactivate spack environmen (or logout+login), remove or rename ~/.spack, and remove or rename the "spackenv" folder in the working directory if present
+
+STEP 1: Install mpi and build custom allreduce operation:
+Within the working directory, create a local spack environment and activate it:
+
+$ spack env create --dir ~/ba/spackenv
+$ spack env activate -p spackenv
+
+For allreduce-basic, we need an appropriate mpi with CUDA support:
+
+$ spack add ucx +cuda cuda_arch=70 +dc +dm +ib_hw_tm +rdmacm +verbs 
+
+$ spack add openmpi@4.1.1 +cuda cuda_arch=70 fabrics=ucx +internal-hwloc 
+$ spack install [ if necessary before that: $ spack concretize --force ]
+[takes approx. 9 min] 
+
+Now we can e.g. build a custom allreduce method (openmpi brings the compiler wrapper mpic++ with it):
+$ cd allreduce-basic
+$ mpic++ allreduce-simple.cpp -o allreduce
+
+Execute it with e.g.:
+mpirun -np 4 ./allreduce-basic
+
+STEP 2: Install and/or build ndzip
+
+Install ndzip via spack, although we still need to build it later anyway, but this is a convenient way to get the correct depedencies:
+$ spack add ndzip +cuda+openmp cuda_arch=70
+$ spack install [takes approx. 1 min]
+
+Build ndzip manually, as we need some libraries which I couldn't find in the spack installation:
+$ cd ndzip
+$ cmake -B build -DCMAKE_CUDA_ARCHITECTURES=70 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-mcpu=native" -DNDZIP_BUILD_BENCHMARK=YES -DNDZIP_BUILD_TEST=YES
+$ cmake --build build -j 
+[takes approx. 5?? min from scratch]
+
+STEP 3: Build Marco's ndzip connector:
+
+Dependendies should be there already from previous step; so build it [maybe the paths at the begin of the Makefile need to be adapted]
+$ cd ndzip_c_library
+$ make all 
+
+Test with:
+$ ./main
+or (maybe spack load openmpi): 
+$ mpirun -np 4 ./main
+
+STEP 4: Build OSU Benchmark
+One option would be to use the build procedure of the original OSU benchmark from here: https://mvapich.cse.ohio-state.edu/benchmarks/ , and build according to https://mvapich.cse.ohio-state.edu/static/media/mvapich/README-OMB.txt
+This involves running a "configure" script and then building with "make". However, this is a bit cumbersome and I prefer to build the modified benchmarks separately with my own Makefile (contained in the same folder as this file):
+
+$ cd osu_benchmark
+$ make [adapt paths in Makefile if necessary]
+
+STEP 5: Execute, e.g.
+$ mpirun -np 4 osu_allreduce -m $((2**15)):$((2**25)) -i 200 -x 50 -c
+

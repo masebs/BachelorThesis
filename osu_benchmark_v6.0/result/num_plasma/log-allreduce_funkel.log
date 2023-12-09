@@ -1,0 +1,38 @@
+[1693076178.445493] [funkel:742683:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+[1693076178.447339] [funkel:742685:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+[1693076178.457036] [funkel:742684:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+[1693076178.457898] [funkel:742686:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+New Instance
+New Instance
+New Instance
+New Instance
+Hi Init hello
+Hi Init hello
+Hi Init hello
+Hi Init hello
+
+# OSU MPI-CUDA Allreduce Latency Test
+# Size           Avg Latency (us)   Avg Compression (us) Avg Communication (us) Avg Decompression (us)        Avg Reduce (us)  Avg compressed length
+8                          182.27                  61.49                  71.38                  25.18                  23.69                      8
+16                         181.97                  61.35                  71.43                  25.05                  23.62                     16
+32                         181.61                  61.32                  71.26                  24.96                  23.53                     32
+64                         181.63                  61.26                  71.39                  24.94                  23.50                     64
+128                        181.87                  61.30                  71.57                  24.93                  23.53                    128
+256                        176.39                  59.32                  69.25                  24.37                  22.94                    256
+512                        176.63                  59.22                  69.62                  24.34                  22.92                    512
+1024                       178.36                  59.20                  71.27                  24.40                  22.96                   1024
+2048                       181.62                  59.24                  74.50                  24.40                  22.96                   2048
+4096                       187.89                  59.31                  80.68                  24.47                  22.91                   4096
+8192                       200.06                  59.49                  92.56                  24.56                  22.94                   8192
+16384                      228.47                  59.90                 119.14                  24.93                  23.97                  16384
+32768                      412.00                 134.51                 188.36                  65.13                  23.47                  29848
+65536                      551.44                 130.82                 333.65                  62.71                  23.72                  59680
+131072                     788.96                 121.51                 584.50                  58.61                  23.80                 119360
+262144                    1302.95                 121.44                1096.88                  58.67                  25.41                 238728
+524288                    2360.57                 121.52                2150.89                  58.93                  28.69                 477472
+1048576                   4503.51                 134.85                4272.57                  60.15                  35.39                 954920
+2097152                   8999.13                 144.63                8743.59                  62.90                  47.44                1909656
+4194304                  18540.54                 191.66               18181.72                  94.57                  71.94                3819320
+8388608                  37745.29                 292.96               37168.08                 163.53                 119.96                7638440
+16777216                 76522.79                 435.10               75610.73                 262.70                 213.38               15276920
+33554432                153309.95                 707.43              151739.52                 463.21                 398.83               30553816

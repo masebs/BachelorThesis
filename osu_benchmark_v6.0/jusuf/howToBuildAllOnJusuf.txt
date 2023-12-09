@@ -1,0 +1,43 @@
+Build everything on JUSUF:
+
+(0) Log in via ssh
+
+(0.5) Activate project: 
+$ jutil env activate -p <PROJECT>
+$ cd $PROJECT/schneider11
+
+(1) Load modules:
+module --force purge
+module load Stages/2020
+module load GCC/10.3
+module load OpenMPI/4.1.1
+module load Boost/1.74.0-nompi
+module load CMake/3.18.0
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/p/software/jusuf/stages/2020/software/Boost/1.74.0-GCCcore-10.3.0-nompi/lib64/:/p/software/jusuf/stages/2020/software/Boost/1.74.0-GCCcore-10.3.0-nompi/lib:/p/project/<PROJECT>/schneider11/ndzip_c_library
+
+(2) build ndzip: 
+$ cd ndzip
+$ rm build/CMakeCache.txt build/cmake_install.cmake
+$ cmake -B build -DCMAKE_CUDA_ARCHITECTURES=70 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-march=native" -DNDZIP_BUILD_BENCHMARK=YES -DNDZIP_BUILD_TEST=YES
+$ cmake --build build -j
+
+(3) build ndzip_c_connector:
+$ cd ndzip_c_connector
+$ make all 
+Test with:
+$ sbatch jobscript.sh
+Monitoring with squeue, sacct --jobs=<jobid>, cancel (if neccesary) with scancel <jobid>
+
+(4) Build original OSU Benchmark:
+$ cd original-osu-micro-benchmarks-6.0
+$ ./configure CC=/p/software/jusuf/stages/2020/software/OpenMPI/4.1.1-GCC-10.3.0/bin/mpicc CXX=/p/software/jusuf/stages/2020/software/OpenMPI/4.1.1-GCC-10.3.0/bin/mpic++ --enable-cuda --with-cuda-include=/p/software/jusuf/stages/2020/software/CUDA/11.3/include --with-cuda-libpath=/p/software/jusuf/stages/2020/software/CUDA/11.3/lib64
+($ make clean)
+$ make
+$ make install
+
+(5) Build custom OSU Benchmark (Makefile is in the same folder as this file):
+$ cd osu_benchmark_v6.0
+$ make
+
+Run according to jobscript_bcast.sh or jobscript_allreduce.sh
+

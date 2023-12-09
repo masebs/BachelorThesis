@@ -1,0 +1,38 @@
+[1693074555.080148] [funkel:742434:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+[1693074555.079917] [funkel:742435:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+[1693074555.080346] [funkel:742437:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+[1693074555.083050] [funkel:742436:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+New Instance
+New Instance
+New Instance
+New Instance
+Hi Init hello
+Hi Init hello
+Hi Init hello
+Hi Init hello
+
+# OSU MPI-CUDA Allreduce Latency Test
+# Size           Avg Latency (us)   Avg Compression (us) Avg Communication (us) Avg Decompression (us)        Avg Reduce (us)  Avg compressed length
+8                           90.13                   0.00                  64.64                   0.00                  25.19                      0
+16                          90.23                   0.00                  64.75                   0.00                  25.18                      0
+32                          90.05                   0.00                  64.61                   0.00                  25.14                      0
+64                          89.99                   0.00                  64.66                   0.00                  25.03                      0
+128                         90.18                   0.00                  64.80                   0.00                  25.09                      0
+256                         90.71                   0.00                  65.36                   0.00                  25.05                      0
+512                         91.06                   0.00                  65.68                   0.00                  25.09                      0
+1024                        92.50                   0.00                  67.13                   0.00                  25.07                      0
+2048                        94.97                   0.00                  70.10                   0.00                  24.58                      0
+4096                        99.49                   0.00                  74.64                   0.00                  24.56                      0
+8192                       111.24                   0.00                  86.26                   0.00                  24.69                      0
+16384                      137.63                   0.00                 112.03                   0.00                  25.30                      0
+32768                      212.50                   0.00                 186.63                   0.00                  25.57                      0
+65536                      360.06                   0.00                 333.63                   0.00                  26.13                      0
+131072                     658.98                   0.00                 631.56                   0.00                  27.10                      0
+262144                    1225.69                   0.00                1197.76                   0.00                  27.62                      0
+524288                    2391.46                   0.00                2360.51                   0.00                  30.64                      0
+1048576                   4756.39                   0.00                4719.27                   0.00                  36.80                      0
+2097152                   9860.06                   0.00                9811.15                   0.00                  48.56                      0
+4194304                  20308.18                   0.00               20229.00                   0.00                  78.77                      0
+8388608                  41567.95                   0.00               41432.37                   0.00                 135.01                      0
+16777216                 83450.39                   0.00               83219.25                   0.00                 230.47                      0
+33554432                167849.71                   0.00              167433.50                   0.00                 415.45                      0

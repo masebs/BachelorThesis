@@ -1,0 +1,7 @@
+NDZIP wrapper originally written by vogma: https://github.com/vogma/daten_masterarbeit
+
+Changes from his version:
+- added CUDA error checks
+- made buffer size selectable via parameter of constructor
+- added switch between double and float (double vs. single precision)
+

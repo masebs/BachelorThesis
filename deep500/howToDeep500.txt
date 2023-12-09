@@ -1,0 +1,37 @@
+How to run Deep500 on JUSUF:
+
+<in .bashrc>
+jutil env activate -p <PROJECT>
+cd $PROJECT/schneider11
+
+module --force purge
+module load Stages/2020
+module load GCC/10.3
+module load OpenMPI/4.1.1 
+module load Python 
+module load TensorFlow
+</ in .bashrc>
+
+Deep500 von Hand "installieren" durch:
+git clone https://github.com/deep500/deep500  
+cp -r deep500 ~/.local/lib/python3.8/site-packages/
+
+In den Sample-Scripts (konkret in samples/distributed_training.py) muss dann nur noch vom Download von mnist auf die Nutzung eines bereits heruntergeladenen Datensatzes umgestellt werden
+# Create dataset and add loss function to model
+#train_set, test_set = d5ds.load_mnist(INPUT_NODE, LABEL_NODE) # alt
+downloaded_files = {}
+downloaded_files["train_images"] = "/p/project/<PROJECT>/schneider11/deep500/samples/mnist/train-images-idx3-ubyte.gz"
+downloaded_files["train_labels"] = "/p/project/<PROJECT>/schneider11/deep500/samples/mnist/train-labels-idx1-ubyte.gz"
+downloaded_files["test_images"] = "/p/project/<PROJECT>/schneider11/deep500/samples/mnist/t10k-images-idx3-ubyte.gz"
+downloaded_files["test_labels"] = "/p/project/<PROJECT>/schneider11/deep500/samples/mnist/t10k-labels-idx1-ubyte.gz"
+train_set, test_set = d5ds.mnist.load_mnist_from_files(downloaded_files, INPUT_NODE, LABEL_NODE, normalize=True)
+model.add_operation(d5.ops.LabelCrossEntropy([OUTPUT_NODE, LABEL_NODE], 'loss'))
+
+load_mnist_from_files in deep500/datasets/mnist.py definieren (die _load_mnist aufrufen)
+
+In /p/home/jusers/schneider11/jusuf/.local/lib/python3.8/site-packages/deep500/lv3:
+- Angepasste communication.py (nutzt C-Library mit Allreduce)
+- liballreduceComp.so bauen mit: make all (cf. Makefile) (alternativ ohne Kompression: mpic++ -fpic -shared -o liballreduceWoComp.so allreduceWoComp.cpp )
+- communication.py now uses C code from liballreduceComp.so
+
+

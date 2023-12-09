@@ -1,0 +1,50 @@
+MPIBIN:=/p/software/jusuf/stages/2020/software/OpenMPI/4.1.1-GCC-10.3.0/bin
+NVCCBIN:=/p/software/jusuf/stages/2020/software/CUDA/11.3/bin
+NDZIP:=/p/project/<PROJECT>/schneider11/ndzip
+LIB64CUDA:=/p/software/jusuf/stages/2020/software/CUDA/11.3/lib64
+LIBCUDA:=/p/software/jusuf/stages/2020/software/CUDA/11.3/lib
+LIB64BOOST:=/p/software/jusuf/stages/2020/software/Boost/1.74.0-GCCcore-10.3.0-nompi/lib64
+LIBBOOST:=/p/software/jusuf/stages/2020/software/Boost/1.74.0-GCCcore-10.3.0-nompi/lib
+INCL:=/p/software/jusuf/stages/2020/software/CUDA/11.3/include
+NDZIP_C_LIBRARY:=/p/project/<PROJECT>/schneider11/ndzip_c_library
+UTIL:=/p/project/<PROJECT>/schneider11/original-osu-micro-benchmarks-6.0/c/util
+
+all:  osu_bcast osu_bcast_orig osu_allreduce osu_allreduce_orig osu_bcast_MV osu_allreduce_cudaTiming
+
+clean: 
+	rm osu_bcast.o osu_bcast osu_bcast_orig.o osu_bcast_orig osu_allreduce.o osu_allreduce osu_allreduce_orig.o osu_allreduce_orig osu_bcast_MV.o osu_bcast_MV addKernel.o print_stats.o osu_allreduce_cudaTiming.o osu_allreduce_cudaTiming
+	
+osu_bcast.o: osu_bcast.c
+	$(MPIBIN)/mpicc -I. -I$(NDZIP_C_LIBRARY) -I$(INCL) -I$(UTIL) -g -O2 -c -o osu_bcast.o osu_bcast.c
+osu_bcast: osu_bcast.o 
+	$(MPIBIN)/mpic++ -g -O2 -Wl,-rpath=$(NDZIP)/build:$(NDZIP_C_LIBRARY):$(LIB64BOOST):$(LIBBOOST) -o osu_bcast osu_bcast.o $(UTIL)/osu_util.o $(UTIL)/osu_util_mpi.o $(UTIL)/kernel.o $(NDZIP)/build/libndzip.so $(NDZIP)/build/libndzip-cuda.so -L$(LIB64CUDA) -L$(LIBCUDA) -L$(NDZIP_C_LIBRARY) -lndzip_api_c_connector -lcuda -lcudart
+
+osu_bcast_orig.o: osu_bcast_orig.c
+	$(MPIBIN)/mpicc -I. -I$(NDZIP_C_LIBRARY) -I$(INCL) -I$(UTIL) -g -O2 -c -o osu_bcast_orig.o osu_bcast_orig.c
+osu_bcast_orig: osu_bcast_orig.o
+	$(MPIBIN)/mpic++ -g -O2 -Wl,-rpath=$(NDZIP)/build:$(NDZIP_C_LIBRARY) -o osu_bcast_orig osu_bcast_orig.o $(UTIL)/osu_util.o $(UTIL)/osu_util_mpi.o $(UTIL)/kernel.o $(NDZIP)/build/libndzip.so $(NDZIP)/build/libndzip-cuda.so -L$(LIB64) -L$(LIB) -L$(NDZIP_C_LIBRARY) -lndzip_api_c_connector -lcuda -lcudart
+
+osu_bcast_MV.o: osu_bcast_MV.c
+	$(MPIBIN)/mpicc -I. -I$(NDZIP_C_LIBRARY) -I$(INCL) -I$(UTIL) -g -O2 -c -o osu_bcast_MV.o osu_bcast_MV.c
+osu_bcast_MV: osu_bcast_MV.o
+	$(MPIBIN)/mpic++ -g -O2 -Wl,-rpath=$(NDZIP)/build:$(NDZIP_C_LIBRARY) -o osu_bcast_MV osu_bcast_MV.o $(UTIL)/osu_util.o $(UTIL)/osu_util_mpi.o $(UTIL)/kernel.o $(NDZIP)/build/libndzip.so $(NDZIP)/build/libndzip-cuda.so -L$(LIB64) -L$(LIB) -L$(NDZIP_C_LIBRARY) -lndzip_api_c_connector -lcuda -lcudart
+
+osu_allreduce.o: osu_allreduce.c
+	$(MPIBIN)/mpicc -I. -I$(NDZIP_C_LIBRARY) -I$(INCL) -I$(UTIL)  -g -O2 -c -o osu_allreduce.o osu_allreduce.c
+addKernel.o: addKernel.cu
+	$(NVCCBIN)/nvcc -ccbin $(MPIBIN)/mpic++ -c -o addKernel.o addKernel.cu
+print_stats.o: print_stats.c
+	$(MPIBIN)/mpicc -I. -I$(INCL) -I$(UTIL) -g -O2 -c -o print_stats.o print_stats.c
+osu_allreduce: osu_allreduce.o addKernel.o print_stats.o
+	$(MPIBIN)/mpic++ -g -O2 -Wl,-rpath=$(NDZIP)/build:$(NDZIP_C_LIBRARY) -o osu_allreduce osu_allreduce.o addKernel.o print_stats.o $(UTIL)/osu_util.o $(UTIL)/osu_util_mpi.o $(UTIL)/kernel.o $(NDZIP)/build/libndzip.so $(NDZIP)/build/libndzip-cuda.so -L$(LIB64) -L$(LIB) -L$(NDZIP_C_LIBRARY) -lndzip_api_c_connector -lcuda -lcudart
+
+osu_allreduce_cudaTiming.o: osu_allreduce_cudaTiming.c
+	$(MPIBIN)/mpicc -I. -I$(NDZIP_C_LIBRARY) -I$(INCL) -I$(UTIL)  -g -O2 -c -o osu_allreduce_cudaTiming.o osu_allreduce_cudaTiming.c
+osu_allreduce_cudaTiming: osu_allreduce_cudaTiming.o addKernel.o print_stats.o
+	$(MPIBIN)/mpic++ -g -O2 -Wl,-rpath=$(NDZIP)/build:$(NDZIP_C_LIBRARY) -o osu_allreduce_cudaTiming osu_allreduce_cudaTiming.o addKernel.o print_stats.o $(UTIL)/osu_util.o $(UTIL)/osu_util_mpi.o $(UTIL)/kernel.o $(NDZIP)/build/libndzip.so $(NDZIP)/build/libndzip-cuda.so -L$(LIB64) -L$(LIB) -L$(NDZIP_C_LIBRARY) -lndzip_api_c_connector -lcuda -lcudart
+
+osu_allreduce_orig.o: osu_allreduce_orig.c
+	$(MPIBIN)/mpicc -I. -I$(NDZIP_C_LIBRARY) -I$(INCL) -I$(UTIL) -g -O2 -c -o osu_allreduce_orig.o osu_allreduce_orig.c
+osu_allreduce_orig: osu_allreduce_orig.o
+	$(MPIBIN)/mpic++ -g -O2 -Wl,-rpath=$(NDZIP)/build:$(NDZIP_C_LIBRARY) -o osu_allreduce_orig osu_allreduce_orig.o $(UTIL)/osu_util.o $(UTIL)/osu_util_mpi.o $(UTIL)/kernel.o $(NDZIP)/build/libndzip.so $(NDZIP)/build/libndzip-cuda.so -L$(LIB64) -L$(LIB) -L$(NDZIP_C_LIBRARY) -lndzip_api_c_connector -lcuda -lcudart
+

@@ -1,0 +1,32 @@
+[1693076416.196467] [funkel:742783:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+[1693076416.195844] [funkel:742784:0]     ucp_context.c:1081 UCX  WARN  transport 'gdr_copy' is not available, please use one or more of: cuda, cuda_copy, cuda_ipc, mm, posix, self, shm, sm, sysv, tcp
+New Instance
+New Instance
+Hi Init hello
+
+# OSU MPI-CUDA Allreduce Latency Test
+# Size           Avg Latency (us)   Avg Compression (us) Avg Communication (us) Avg Decompression (us)        Avg Reduce (us)  Avg compressed length
+Hi Init hello
+8                           44.77                   0.00                  31.88                   0.00                  12.72                      0
+16                          44.80                   0.00                  31.85                   0.00                  12.78                      0
+32                          44.75                   0.00                  31.89                   0.00                  12.69                      0
+64                          44.74                   0.00                  31.89                   0.00                  12.67                      0
+128                         44.65                   0.00                  31.81                   0.00                  12.67                      0
+256                         44.73                   0.00                  31.92                   0.00                  12.65                      0
+512                         45.30                   0.00                  32.44                   0.00                  12.68                      0
+1024                        46.06                   0.00                  33.21                   0.00                  12.68                      0
+2048                        47.44                   0.00                  34.59                   0.00                  12.68                      0
+4096                        50.60                   0.00                  37.66                   0.00                  12.77                      0
+8192                        56.87                   0.00                  43.87                   0.00                  12.82                      0
+16384                       37.40                   0.00                  24.25                   0.00                  12.98                      0
+32768                       38.36                   0.00                  24.92                   0.00                  13.26                      0
+65536                       38.87                   0.00                  25.29                   0.00                  13.41                      0
+131072                      40.02                   0.00                  26.08                   0.00                  13.77                      0
+262144                      41.93                   0.00                  27.54                   0.00                  14.22                      0
+524288                      47.86                   0.00                  32.03                   0.00                  15.66                      0
+1048576                     58.03                   0.00                  38.99                   0.00                  18.86                      0
+2097152                     86.01                   0.00                  58.97                   0.00                  26.82                      0
+4194304                    141.88                   0.00                 100.70                   0.00                  40.93                      0
+8388608                    238.37                   0.00                 170.67                   0.00                  67.33                      0
+16777216                   438.37                   0.00                 320.40                   0.00                 117.44                      0
+33554432                   779.20                   0.00                 568.70                   0.00                 209.99                      0

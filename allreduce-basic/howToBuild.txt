@@ -1,0 +1,22 @@
+Butterfly-based Allreduce without compression: allreduce.cpp
+
+Build with (on all systems):
+mpic++ allreduce.cpp -o allreduce
+or use "make"
+
+Execute on funkel: 
+mpirun -np 4 ./allreduce
+
+Execute on jusuf (can run on one node and doesn't use gpu):
+srun --account=<project> --ntasks=4 ./allreduce >& allreduce.log &
+
+Butterfly-based Allreduce WITH compression: allreduceComp.cpp
+
+Build with "make"
+
+Execute on funkel: 
+mpirun -np 4 ./allreduceComp
+
+Execute on jusuf (doesn't need gpu):
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/p/software/jusuf/stages/2020/software/Boost/1.74.0-GCCcore-10.3.0-nompi/lib64/:/p/software/jusuf/stages/2020/software/Boost/1.74.0-GCCcore-10.3.0-nompi/lib:/p/project/<PROJECT>/schneider11/ndzip_c_library
+srun --account=<project> --nodes=4 --ntasks=4 --partition=gpus ./allreduceComp

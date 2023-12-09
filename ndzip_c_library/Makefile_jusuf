@@ -1,0 +1,16 @@
+NDZIP:=/p/project/<PROJECT>/schneider11/ndzip
+CUDA:=/p/software/jusuf/stages/2020/software/CUDA/11.3
+BOOST:=/p/software/jusuf/stages/2020/software/Boost/1.74.0-GCCcore-10.3.0-nompi
+HOME:=/p/project/<PROJECT>/schneider11/ndzip_c_library
+TYPE:=USE_FLOAT
+
+all: libndzip_api.so libndzip_api_c_connector.so #main #libndzip_api_c_connector.a
+
+libndzip_api.so: ndzip_api.cc Makefile
+	g++ -fpic -D$(TYPE) -DNDZIP_CUDA_SUPPORT=1 -DNDZIP_HIPSYCL_SUPPORT=0 -DNDZIP_OPENMP_SUPPORT=0 -I$(CUDA)/include -I$(NDZIP)/include -I$(NDZIP)/src -isystem $(BOOST)/include -march=native -O3 -DNDEBUG -Wall -Wextra -Wno-attributes -Wimplicit-fallthrough -Werror=return-type -Werror=init-self -Werror=undef -std=gnu++17 -shared ndzip_api.cc -o libndzip_api.so -Wl,-rpath,$(BOOST)/lib:$(NDZIP)/build:$(CUDA)/lib64 $(NDZIP)/build/libio.a $(NDZIP)/build/libndzip-cuda.so $(NDZIP)/build/libndzip.so $(CUDA)/lib64/libcudart.so
+
+libndzip_api_c_connector.so: ndzip_c_connector.cc Makefile
+	g++ -fpic -D$(TYPE) -DNDZIP_CUDA_SUPPORT=1 -DNDZIP_HIPSYCL_SUPPORT=0 -DNDZIP_OPENMP_SUPPORT=0 -I$(CUDA)/include -I$(NDZIP)/include -I$(NDZIP)/src -isystem $(BOOST)/include -march=native -O3 -DNDEBUG -Wall -Wextra -Wno-attributes -Wimplicit-fallthrough -Werror=return-type -Werror=init-self -Werror=undef -std=gnu++17 -shared ndzip_c_connector.cc -L$(HOME) -lndzip_api -o libndzip_api_c_connector.so
+
+main: main.c Makefile
+	gcc -I$(CUDA)/include main.c -D$(TYPE) -L$(HOME) -lndzip_api -lndzip_api_c_connector -o main -L$(CUDA)/lib64 -lcudart -Wl,-rpath,$(BOOST)/lib:$(HOME)

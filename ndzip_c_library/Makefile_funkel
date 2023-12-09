@@ -1,0 +1,18 @@
+NDZIP:=/home/00/mschneider/ba/ndzip
+#NDZIPBUILD:=/home/00/mschneider/.spack/opt/spack/linux-rocky9-power9le/gcc-11.3.1/ndzip-2021-11-30-wrzafeq3i5cl2nbnwf2oaszfbsxkilkm/lib64
+NDZIPBUILD:=/home/00/mschneider/ba/ndzip/build
+LIB64:=/home/00/mschneider/ba/env-ndzip/.spack-env/view/lib64
+LIB:=/home/00/mschneider/ba/env-ndzip/.spack-env/view/lib
+INCL:=/home/00/mschneider/ba/env-ndzip/.spack-env/view/include
+HOME:=/home/00/mschneider/ba/vogel/daten_masterarbeit/ndzip_c_library
+
+all: libndzip_api.so libndzip_api_c_connector.so main
+
+libndzip_api.so: ndzip_api.cc Makefile
+	g++ -fpic -DNDZIP_CUDA_SUPPORT=1 -DNDZIP_HIPSYCL_SUPPORT=0 -DNDZIP_OPENMP_SUPPORT=0 -I$(INCL) -I$(NDZIP)/include -I$(NDZIP)/src -isystem $(INCL) -mcpu=native -O3 -DNDEBUG -Wall -Wextra -Wno-attributes -Wimplicit-fallthrough -Werror=return-type -Werror=init-self -Werror=undef -std=gnu++17 -shared ndzip_api.cc -o libndzip_api.so -Wl,-rpath,$(LIB):$(NDZIP)/build:$(LIB64) $(NDZIP)/build/libio.a $(NDZIP)/build/libndzip-cuda.so $(NDZIP)/build/libndzip.so $(LIB64)/libcudart.so
+
+libndzip_api_c_connector.so: ndzip_c_connector.cc Makefile
+	g++ -fpic -DNDZIP_CUDA_SUPPORT=1 -DNDZIP_HIPSYCL_SUPPORT=0 -DNDZIP_OPENMP_SUPPORT=0 -I$(INCL) -I$(NDZIP)/include -I$(NDZIP)/src -isystem $(INCL) -mcpu=native -O3 -DNDEBUG -Wall -Wextra -Wno-attributes -Wimplicit-fallthrough -Werror=return-type -Werror=init-self -Werror=undef -std=gnu++17 -shared ndzip_c_connector.cc -L$(HOME) -lndzip_api -o libndzip_api_c_connector.so
+
+main: main.c Makefile
+	gcc -I$(INCL) main.c -L$(HOME) -lndzip_api -lndzip_api_c_connector -o main -L$(LIB64) -lcudart
